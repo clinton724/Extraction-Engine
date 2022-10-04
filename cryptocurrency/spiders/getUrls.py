@@ -1,17 +1,13 @@
 import scrapy
-import sys
-sys.path.insert(0, '../')
-from items import CryptocurrencyItem
-from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings
+from ..items import CryptocurrencyItem
 
 
 class UrlSpider(scrapy.Spider):
     
     name = "getUrls"
     start_urls = ['https://www.coingecko.com']
-    #custom_settings = {'ITEM_PIPELINES': {'cryptocurrency.pipelines.CryptocurrencyPipeline': 300}}
-    print("crawler running")
+    custom_settings = {'ITEM_PIPELINES': {'cryptocurrency.pipelines.CryptocurrencyPipeline': 300}}
+
     def parse(self, response):
         """ Contract to check presence of fields in scraped items
         @url https://www.coingecko.com
@@ -46,8 +42,3 @@ class UrlSpider(scrapy.Spider):
        items['historicalData'] = historicalData
        items['market'] = market
        yield items
-
-if __name__ == '__main__':
-    process = CrawlerProcess(get_project_settings())
-    process.crawl(UrlSpider)
-    process.start()
