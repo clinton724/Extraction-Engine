@@ -42,19 +42,8 @@ class ScraperPipeline(object):
             self.curr = self.conn.cursor()      
 
     def process_item(self, item, spider):
-        current_date = str(date.today())
-        itemDate = item['Date']
-        coin = item['coin']
-        self.curr.execute(f"SELECT DATEDIFF(day, {current_date}, {itemDate})")
-        thirtyDaysAgo = self.curr.fetchone()
+        self.curr.execute("""insert into HistoricalData values (%s,%s,%s,%s,%s,%s)""", 
+                          ( item['coin'], item['Date'], item['Market_cap'], item['Volume'], item['Open'], item['Close']))
         self.conn.commit()
-        print(type(current_date), " ", type(itemDate), " ", abs(thirtyDaysAgo[0]), " ", type(int(abs(thirtyDaysAgo[0]))) )
-        if int(abs(thirtyDaysAgo[0])) >= 30: 
-            self.curr.execute(f"delete from HistoricalData where Cryptocurrency = {coin} and Date = {current_date}")
-            self.conn.commit()
-        elif int(abs(thirtyDaysAgo[0])) == 0:
-            self.curr.execute("""insert into HistoricalData values (%s,%s,%s,%s,%s,%s)""", 
-                            ( item['coin'], item['Date'], item['Market_cap'], item['Volume'], item['Open'], item['Close']))
-            self.conn.commit()
         return item
     
