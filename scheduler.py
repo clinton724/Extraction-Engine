@@ -7,14 +7,14 @@ from twisted.internet import reactor
 def send_request():
     requests.post("https://tranquil-hamlet-30660.herokuapp.com/schedule.json", data={
         "project": "cryptocurrency",
-        "spider": "getUrls"
+        "spider": "rawData"
     })
 
 if __name__ == "__main__":
     subprocess.run("scrapyd-deploy", shell=True, universal_newlines=True)
     scheduler = TwistedScheduler(timezone=pytz.timezone('Africa/Johannesburg'))
     # cron trigger that schedules job every every 20 minutues on weekdays
-    scheduler.add_job(send_request, 'cron', day_of_week='mon-sun', hour='*/2')
+    scheduler.add_job(send_request, 'cron', day_of_week='mon-sun', minutes='*/1')
     # start the scheduler
     scheduler.start()
     reactor.run()
