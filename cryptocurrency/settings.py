@@ -42,6 +42,9 @@ COOKIES_ENABLED = False
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
 
+#Enable SCrapy Autounit
+AUTOUNIT_ENABLED = True
+
 # Override the default request headers:
 #DEFAULT_REQUEST_HEADERS = {
 #   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -50,9 +53,10 @@ COOKIES_ENABLED = False
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'cryptocurrency.middlewares.CryptocurrencySpiderMiddleware': 543,
-#}
+SPIDER_MIDDLEWARES = {
+    'cryptocurrency.middlewares.CryptocurrencySpiderMiddleware': 543,
+    'scrapy_autounit.AutounitMiddleware': 900
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
