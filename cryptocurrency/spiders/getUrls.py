@@ -1,5 +1,7 @@
 import scrapy
 from ..items import CryptocurrencyItem
+from scrapy.contracts import Contract
+from scrapy.exceptions import ContractFail
 
 
 class UrlSpider(scrapy.Spider):
@@ -10,7 +12,7 @@ class UrlSpider(scrapy.Spider):
 
     def parse(self, response):
         """ Contract to check presence of fields in scraped items
-        @url https://www.coingecko.com
+        @scrapes name rootURL historicalData market
         """
         for index in response.css("""body > div.container > div.gecko-table-container > div.coingecko-table 
                         > div.position-relative > div > table > tbody > tr:nth-child(n+1) > td.py-0.coin-name.cg-sticky-col.cg-sticky-third-col.px-0 

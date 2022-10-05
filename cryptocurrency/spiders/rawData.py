@@ -30,6 +30,9 @@ class getData(scrapy.Spider):
                 yield scrapy.Request(url=index[1], callback=self.parse)
     
     def parse(self, response):
+           """ Contract to check presence of fields in scraped items
+           @scrapes name rootURL historicalData market
+           """
            items = ScraperItem()
            name = response.css("""body > div.container > div.tw-grid.tw-grid-cols-1.lg\:tw-grid-cols-3.tw-mb-4 > 
                     div.tw-col-span-3.md\:tw-col-span-2 > div > div.tw-col-span-2.md\:tw-col-span-2 > 
