@@ -43,7 +43,7 @@ COOKIES_ENABLED = False
 #TELNETCONSOLE_ENABLED = False
 
 #Enable SCrapy Autounit
-AUTOUNIT_ENABLED = True
+#AUTOUNIT_ENABLED = True
 
 # Override the default request headers:
 #DEFAULT_REQUEST_HEADERS = {
