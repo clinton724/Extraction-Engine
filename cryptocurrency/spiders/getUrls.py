@@ -20,10 +20,10 @@ class UrlSpider(scrapy.Spider):
              url = response.urljoin(index.get())
              yield scrapy.Request(url=url, callback=self.parseInnerPage)
         
-        ##nextPage = response.css("body > div.container > div.gecko-table-container > div.coingecko-table > div.row.no-gutters.tw-flex.flex-column.flex-lg-row.tw-justify-center.mt-2 > nav > ul > li.page-item.next > a::attr('href')").get()    
-        ##if nextPage is not None:
-        ##   nextPage = response.urljoin(nextPage)
-        ##  yield scrapy.Request(url=nextPage, callback=self.parse)
+        nextPage = response.css("body > div.container > div.gecko-table-container > div.coingecko-table > div.row.no-gutters.tw-flex.flex-column.flex-lg-row.tw-justify-center.mt-2 > nav > ul > li.page-item.next > a::attr('href')").get()    
+        if nextPage is not None:
+          nextPage = response.urljoin(nextPage)
+          yield scrapy.Request(url=nextPage, callback=self.parse)
           
 
     def parseInnerPage(self, response):
