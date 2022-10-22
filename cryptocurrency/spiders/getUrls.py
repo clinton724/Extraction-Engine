@@ -1,7 +1,11 @@
 import scrapy
-from ..items import CryptocurrencyItem
+import sys
+sys.path.insert(0, '../')
+from items import CryptocurrencyItem
 from scrapy.contracts import Contract
 from scrapy.exceptions import ContractFail
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
 
 
 class UrlSpider(scrapy.Spider):
@@ -44,3 +48,9 @@ class UrlSpider(scrapy.Spider):
        items['historicalData'] = historicalData
        items['market'] = market
        yield items
+
+if __name__ == "__main__":
+  settings = get_project_settings()
+  process = CrawlerProcess(settings)
+  process.crawl(UrlSpider)
+  process.start()

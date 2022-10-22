@@ -1,4 +1,5 @@
 import scrapy
+from yaml import Mark
 from ..items import ScraperItem
 import pymssql
 from dotenv import load_dotenv
@@ -45,21 +46,26 @@ class getData(scrapy.Spider):
                 Volume = index.css("td:nth-child(3)::text").extract()
                 Open = index.css("td:nth-child(4)::text").extract()
                 Close = index.css("td:nth-child(5)::text").extract()
-                temp1 = Market_cap[0].split("\n")
-                temp2 = Volume[0].split("\n")
-                temp3 = Open[0].split("\n")
-                temp4 = Close[0].split("\n")
+
+                Market_cap = Market_cap[0].split("\n")[1].split("$")[1].split(",")
+                Market_cap = "".join(Market_cap)
+                Volume = Volume[0].split("\n")[1].split("$")[1].split(",")
+                Volume = "".join(Volume)
+                Open = Open[0].split("\n")[1].split("$")[1].split(",")
+                Open = "".join(Open)
+                if Close[0] == '\nN/A\n':
+                  Close = 0
+                else: 
+                    Close = Close[0].split("\n")[1].split("$")[1].split(",")
+                    Close = "".join(Close)
                 temp0 = name.split("\n")
                 coin = temp0[1]
                 Date = Date[0]
-                Market_cap = temp1[1]
-                Volume = temp2[1]
-                Open = temp3[1]
-                Close = temp4[1]
+             
                 items['coin'] = coin
-                items['Market_cap'] = Market_cap
+                items['Market_cap'] = float(Market_cap)
                 items['Date'] = Date
-                items['Volume'] = Volume
-                items['Open'] = Open
-                items['Close'] = Close
+                items['Volume'] = float(Volume)
+                items['Open'] = float(Open)
+                items['Close'] = float(Close)
                 yield items
