@@ -1,29 +1,16 @@
 import scrapy
-from yaml import Mark
 from ..items import ScraperItem
-import pymssql
-from dotenv import load_dotenv
-import os
-
-user_name = 'designdb-admin@designdb'
-password = 'Design2022'
-serverName = 'designdb.database.windows.net'
-
-def connectionPool ():
-            conn = pymssql.connect(server=serverName, 
-                            user=user_name, 
-                            password=password, 
-                            database='RawData')
-            return conn,conn.cursor()
-
-connection, cursor = connectionPool() 
-
+import sys
+sys.path.insert(0, '../../')
+from db import connection, cursor
 
 class getData(scrapy.Spider):
     name = "rawData"
     custom_settings = {'ITEM_PIPELINES': {'cryptocurrency.pipelines.ScraperPipeline': 300}}
     cursor.execute("select Cryptocurrency, historicalData_URL from urlMapping")
     data = cursor.fetchall()
+    connection.commit()
+    cursor.execute("delete from urlMapping")
     connection.commit()
 
     def start_requests(self):

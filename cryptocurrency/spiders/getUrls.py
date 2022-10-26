@@ -1,11 +1,8 @@
 import scrapy
+from ..items import CryptocurrencyItem
 import sys
-sys.path.insert(0, '../')
-from items import CryptocurrencyItem
-from scrapy.contracts import Contract
-from scrapy.exceptions import ContractFail
-from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings
+sys.path.insert(0, '../../')
+from db import connection, cursor
 
 
 class UrlSpider(scrapy.Spider):
@@ -13,6 +10,8 @@ class UrlSpider(scrapy.Spider):
     name = "getUrls"
     start_urls = ['https://www.coingecko.com']
     custom_settings = {'ITEM_PIPELINES': {'cryptocurrency.pipelines.CryptocurrencyPipeline': 300}}
+    cursor.execute("delete from urlMapping")
+    connection.commit()
 
     def parse(self, response):
         """ Contract to check presence of fields in scraped items
@@ -24,10 +23,10 @@ class UrlSpider(scrapy.Spider):
              url = response.urljoin(index.get())
              yield scrapy.Request(url=url, callback=self.parseInnerPage)
         
-        #nextPage = response.css("body > div.container > div.gecko-table-container > div.coingecko-table > div.row.no-gutters.tw-flex.flex-column.flex-lg-row.tw-justify-center.mt-2 > nav > ul > li.page-item.next > a::attr('href')").get()    
-        #if nextPage is not None:
-        #  nextPage = response.urljoin(nextPage)
-        #  yield scrapy.Request(url=nextPage, callback=self.parse)
+        nextPage = response.css("body > div.container > div.gecko-table-container > div.coingecko-table > div.row.no-gutters.tw-flex.flex-column.flex-lg-row.tw-justify-center.mt-2 > nav > ul > li.page-item.next > a::attr('href')").get()    
+        if nextPage is not None:
+          nextPage = response.urljoin(nextPage)
+          yield scrapy.Request(url=nextPage, callback=self.parse)
           
 
     def parseInnerPage(self, response):
@@ -48,9 +47,3 @@ class UrlSpider(scrapy.Spider):
        items['historicalData'] = historicalData
        items['market'] = market
        yield items
-
-if __name__ == "__main__":
-  settings = get_project_settings()
-  process = CrawlerProcess(settings)
-  process.crawl(UrlSpider)
-  process.start()
