@@ -1,19 +1,9 @@
 import scrapy
 from yaml import Mark
 from ..items import ScraperItem
-import pymssql
-user_name = 'designdb-admin@designdb'
-password = 'Design2022'
-serverName = 'designdb.database.windows.net'
-
-def connectionPool ():
-            conn = pymssql.connect(server=serverName, 
-                            user=user_name, 
-                            password=password, 
-                            database='RawData')
-            return conn,conn.cursor()
-
-connection, cursor = connectionPool() 
+import sys
+sys.path.insert(0, '../')
+from db import connection, cursor
 
 
 class getData(scrapy.Spider):
@@ -22,7 +12,7 @@ class getData(scrapy.Spider):
     cursor.execute("select Cryptocurrency, historicalData_URL from urlMapping")
     data = cursor.fetchall()
     connection.commit()
-    cursor.execute("delete from urlMapping")
+    cursor.execute("delete from historicalData_URL")
     connection.commit()
 
     def start_requests(self):
