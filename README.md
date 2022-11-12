@@ -1,5 +1,6 @@
 # ELEN4002A/ELEN4012A - Web Scraping System For Big Data Applications
-
+## Author
+- Ntepela Letsoela (1652736)
 ## Instructions on how to run the code
 - Download the folder zip file
 - Open the code on a terminal if using linux or mac. Alternatively open the code via Visual Studio
